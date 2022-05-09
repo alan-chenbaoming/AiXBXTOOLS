@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class getLunWenTeacherUpdate extends Command
 {
@@ -37,11 +38,7 @@ class getLunWenTeacherUpdate extends Command
      */
     public function handle()
     {
-        Cache::add('donghua-lunwen-teacher-check-num', 2);
-
-        dd(Cache::get('donghua-lunwen-teacher-check-num', 'default'));
-
-
+        //dd(Cache::set('donghua-lunwen-teacher-check-num', 2));
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -72,8 +69,12 @@ class getLunWenTeacherUpdate extends Command
         // echo $response;
         //dd($response,json_decode($response,true));
         $res = json_decode($response,true);
-        $num = 2;
-        if (count($res['teacherFileList'])>$num||count($res['teacherMessageList'])>$num) {
+
+
+        $num = Cache::get('donghua-lunwen-teacher-check-num', 2);
+        $teacherMessageList_count = count($res['teacherMessageList']);
+        if ($teacherMessageList_count>$num) {
+            Cache::set('donghua-lunwen-teacher-check-num', $teacherMessageList_count);
             $this->sendDD('老师批改了你的论文记得查阅，这是老师第'.count($res['teacherMessageList']).'次批阅，老师说了以下内容：'.$res['teacherMessageList'][$num]['message']);
         }
         //$this->sendDD('检查脚本是否自动执行');
