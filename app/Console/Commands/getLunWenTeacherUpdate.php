@@ -37,6 +37,11 @@ class getLunWenTeacherUpdate extends Command
      */
     public function handle()
     {
+        Cache::add('donghua-lunwen-teacher-check-num', 2);
+
+        dd(Cache::get('donghua-lunwen-teacher-check-num', 'default'));
+
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
