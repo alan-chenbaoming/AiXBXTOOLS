@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('command:getLunWenTeacherUpdate')->everyFiveMinutes();
+        $schedule->command('command:getLunWenTeacherUpdate')->everyMinute();
     }
 
     /**

@@ -71,8 +71,8 @@ class getLunWenTeacherUpdate extends Command
         if (count($res['teacherFileList'])>$num||count($res['teacherMessageList'])>$num) {
             $this->sendDD('老师批改了你的论文记得查阅，这是老师第'.count($res['teacherMessageList']).'次批阅，老师说了以下内容：'.$res['teacherMessageList'][$num]['message']);
         }
+        $this->sendDD('检查脚本是否自动执行');
         dd($res);
-        //$this->sendDD('检查脚本是否自动执行');
 
     }
 
