@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+<!--  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.7/theme-chalk/index.css" rel="stylesheet">
+  <link href="prism.css" rel="stylesheet" />
+  <link rel="icon" href="./auto.jpeg">
+</head>
+<body>
+  <div id="app">
+    <el-tabs type="border-card">
+        <!-- <el-tab-pane label="获取参数部分"><pre><code class="line-numbers language-php" v-html="a"></code></pre></el-tab-pane> -->
+        <el-tab-pane label="获取参数部分"><pre><code class="line-numbers language-php" v-html="data.inputCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="Check校验部分"><pre><code class="line-numbers language-php" v-html="data.checkCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="写入数组部分"><pre><code class="line-numbers language-php" v-html="data.createdCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="更新部分"><pre><code class="line-numbers language-php" v-html="data.updateCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="查看部分"><pre><code class="line-numbers language-php" v-html="data.listCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="文档部分"><pre><code class="line-numbers language-php" v-html="data.documentationCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="Json部分"><pre><code class="line-numbers language-css" v-html="data.jsonCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="arrayGetCode部分"><pre><code class="line-numbers language-css" v-html="data.arrayGetCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="arrayGetCheckCode部分"><pre><code class="line-numbers language-css" v-html="data.arrayGetCheckCode"></code></pre></el-tab-pane>
+        <el-tab-pane label="字段描述"><pre><code class="line-numbers language-css" v-html="data.desc"></code></pre></el-tab-pane>
+      </el-tabs>
+  </div>
+<!--  <script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+<!--  <script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+<!--  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.8/vue.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.7/index.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.26.1/axios.js"></script>
+  <script src="prism.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return {
+          data: '',
+          // a:"echo 1",
+            text:'',
+          table:'',
+          tables:[],
+		  prefix:'xzh_',
+		  prefixs:[
+			  'xzh_',
+			  'ng_',
+			  'ds_'
+		  ],
+		  table_keywords:'',
+		   }
+      },
+      created(){
+        // this.a = '$id = Input::get("id","");//'
+        // var o = document.getElementById('js1');
+        // o.setAttribute('src', 'prism.js');
+        this.getData();
+        this.getTables();
+      },
+	  updated(){
+		  console.warn('DOM刷新，执行updated操作')
+		  Prism.highlightAll();//用来再次执行prism，高亮效果
+	  },
+	  watch:{
+		 //  data(){
+			// console.warn('发现数据变化，进行高亮操作')
+			// Prism.highlightAll();//用来再次执行prism，高亮效果
+		 //  }
+	  },
+      methods:{
+        getData(){
+          url = 'http://127.0.0.1:8000/getExcelToData';
+        //   if(this.table){
+        //     url += '?table='+this.table
+        //   }
+          axios.get(url)
+                  .then(res => {
+                      console.log(res.data)
+                      this.data = res.data
+                })
+
+        },
+        getTables(query){
+		  console.log('prefix',this.prefix,'table_keywords',query)
+          url = 'http://localhost/demo/autoCode/tables.php?prefix='+this.prefix;
+		  if(query){
+			  url +='&table='+query
+		  }
+          axios.get(url)
+                  .then(res => {
+                      console.log(res.data)
+                      this.tables = res.data
+                })
+        }
+      }
+    })
+  </script>
+</body>
+</html>
